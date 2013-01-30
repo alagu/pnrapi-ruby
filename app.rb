@@ -9,7 +9,7 @@ require File.join(File.dirname(__FILE__), 'models.rb')
 set :cache, Dalli::Client.new
 
 
-get '' do
+get '/' do
   "Hello World!"
 end
 
