@@ -4,10 +4,17 @@ require 'json'
 require 'rest_client'
 require 'date'
 
-require File.join(File.dirname(__FILE__), 'models.rb')
+base_path = File.join(File.dirname(__FILE__), 'models')
 
+require File.join(File.dirname(__FILE__), 'config.rb')
+require File.join(base_path, 'status.rb')
+require File.join(base_path, 'trains.rb')
+
+client   = MongoClient.new('localhost', 27017)
+DB       = client['pnrapi']
+
+set :environment, :development
 set :cache, Dalli::Client.new
-
 
 get '/' do
   "Hello World!"
