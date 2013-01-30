@@ -57,12 +57,32 @@ class Status
               return_object['data']['train_name'] = statement
             elsif i == 2 
               date = statement.gsub(' ','')
-              return_object['data']['travel_date'] = {'date' => date}
-              return_object['data']['travel_date']['timestamp'] = DateTime.strptime(date, "%d-%m-%Y").to_time.to_i
-=begin
-              timeobj = time.strptime(date, "%d-%m-%Y")
-              return_object['data']['travel_date'] = {'timestamp':int(time.mktime(timeobj)),'date':date}
-=end
+              timestamp = DateTime.strptime(date, "%d-%m-%Y").to_time.to_i
+              return_object['data']['travel_date'] = {'timestamp' => timestamp, 'date' => date}
+            elsif i == 3
+              return_object['data']['from'] = {:code => statement, :name => statement} #DB restapi.models.Station().get_station(code=statement)
+              return_object['data']['from']['time'] = statement # DB restapi.models.Schedule().get_departure_time(return_object['data']['train_number'], return_object['data']['from']['code'])
+            elsif i == 4
+              return_object['data']['to'] = {:code => statement, :name => statement} #DB restapi.models.Station().get_station(code=statement)
+              return_object['data']['to']['time'] = statement # DB restapi.models.Schedule().get_departure_time(return_object['data']['train_number'], return_object['data']['from']['code'])
+            elsif i == 5
+              return_object['data']['alight'] = {:code => statement, :name => statement} #DB restapi.models.Station().get_station(code=statement)
+              return_object['data']['alight']['time'] = statement # DB restapi.models.Schedule().get_departure_time(return_object['data']['train_number'], return_object['data']['from']['code'])
+            elsif i == 6
+              return_object['data']['board'] = {:code => statement, :name => statement} #DB restapi.models.Station().get_station(code=statement)
+              return_object['data']['board']['time'] = statement # DB restapi.models.Schedule().get_departure_time(return_object['data']['train_number'], return_object['data']['from']['code'])
+            elsif i == 7
+              return_object['data']['class'] = statement
+            elsif i > 7
+              puts statement
+              if not statement.index('Passenger').nil?
+                passenger_count = passenger_count + 1
+                passenger_line = 0
+                if passenger_count == 1
+                  return_object['data']['passenger'] = [] 
+                end
+#                return_object['data']['passenger'].push({'seat_number' => '', 'status' => ''})
+              end
             end
             i = i + 1
           end
@@ -81,25 +101,6 @@ class Status
 =begin
   try :
     
-
-    for line in statuslines:
-       matches = expression.findall(line) 
-       if len(matches) > 0 :
-          statement =  matches[0].replace('<B>','').replace('</B>','')
-          statement = statement.strip()
-          #print statement
-
-          if(i == 0):
-            return_object['data']['train_number'] = statement.replace('*','')
-          elif(i==1):
-            return_object['data']['train_name'] = statement
-          elif(i==2):
-            date = statement.replace(' ','')
-            timeobj = time.strptime(date, "%d-%m-%Y")
-            return_object['data']['travel_date'] = {'timestamp':int(time.mktime(timeobj)),'date':date}
-          elif(i==3):
-            return_object['data']['from'] = restapi.models.Station().get_station(code=statement)
-            return_object['data']['from']['time'] = restapi.models.Schedule().get_departure_time(return_object['data']['train_number'], return_object['data']['from']['code'])
           elif(i==4):
             return_object['data']['to'] = restapi.models.Station().get_station(code=statement)
             return_object['data']['to']['time'] = restapi.models.Schedule().get_arrival_time(return_object['data']['train_number'], return_object['data']['to']['code'])
