@@ -18,7 +18,7 @@ class Status
 
     return_object = {}
     return_object['status'] = 'OK'
-    return_object['data']   = { 'lines' => []}
+    return_object['data']   = {}
 
     begin
       response = RestClient.post url, params, headers
@@ -35,7 +35,6 @@ class Status
         return_object['status'] = 'INVALID'
         return_object['data']   = {'pnr_number' => pnr , 'message' => 'Invalid number'}
       else
-        return_object['debug'] = statuslines
         expression = />(.*)</
 
         i = 0
@@ -49,7 +48,6 @@ class Status
           if matches.length > 0 
             statement = matches[1].gsub('<B>','').gsub('</B>','')
             statement.strip!
-            return_object['data']['lines'].push statement
 
             if i == 0
               return_object['data']['train_number'] = statement.gsub('*','')      
@@ -74,80 +72,41 @@ class Status
             elsif i == 7
               return_object['data']['class'] = statement
             elsif i > 7
-              puts statement
               if not statement.index('Passenger').nil?
                 passenger_count = passenger_count + 1
+
                 passenger_line = 0
                 if passenger_count == 1
                   return_object['data']['passenger'] = [] 
                 end
-#                return_object['data']['passenger'].push({'seat_number' => '', 'status' => ''})
+                return_object['data']['passenger'].push({'seat_number' => '', 'status' => ''})
+              else
+                if passenger_line == 0
+                  return_object['data']['passenger'][passenger_count-1]['seat_number'] = statement.gsub('  ',' ')
+                  passenger_line = passenger_line + 1
+                elsif passenger_line == 1
+                  return_object['data']['passenger'][passenger_count-1]['status'] = statement.gsub('  ',' ')
+                  passenger_line = passenger_line + 1
+                end
               end
             end
+
+            if i>7 and not statement.index('CHART NOT PREPARED').nil?
+              chart_prepared = false
+            end
+
+            return_object['data']['chart_prepared'] = chart_prepared
+            return_object['data']['pnr_number'] = pnr
+
             i = i + 1
           end
         end         
       end
-    rescue
-
+    rescue      
+      return_object['status'] = 'TIMEOUT'
+      return_object['data']   = {'pnr_number' => pnr_num , 'message' => 'Timed out'}
     end
 
-
-    
     return return_object
-
   end
-
-=begin
-  try :
-    
-          elif(i==4):
-            return_object['data']['to'] = restapi.models.Station().get_station(code=statement)
-            return_object['data']['to']['time'] = restapi.models.Schedule().get_arrival_time(return_object['data']['train_number'], return_object['data']['to']['code'])
-          elif(i==5):
-            return_object['data']['alight'] = restapi.models.Station().get_station(code=statement)
-            return_object['data']['alight']['time'] = restapi.models.Schedule().get_arrival_time(return_object['data']['train_number'], return_object['data']['alight']['code'])
-          elif(i==6):
-            return_object['data']['board'] = restapi.models.Station().get_station(code=statement)
-            return_object['data']['board']['time'] = restapi.models.Schedule().get_departure_time(return_object['data']['train_number'], return_object['data']['board']['code'])
-            departure_string  = (date + " " + return_object['data']['board']['time'])
-            departure_date = time.strptime(departure_string, "%d-%m-%Y %H:%M")
-            return_object['data']['board']['timestamp'] = int(time.mktime(time.strptime(departure_string, "%d-%m-%Y %H:%M")))
-          elif(i==7):
-            return_object['data']['class'] = statement
-          elif(i>7):
-            if statement.find('Passenger') != -1:
-              passenger_count = passenger_count + 1
-              passenger_line = 0
-              if (passenger_count == 1):
-                return_object['data']['passenger'] = [] 
-              return_object['data']['passenger'].append({'seat_number':'','status':''})
-              continue
-            else:
-              if passenger_line == 0:
-                return_object['data']['passenger'][passenger_count-1]['seat_number'] = statement.replace('  ',' ')
-                passenger_line = passenger_line + 1
-              elif passenger_line == 1:
-                return_object['data']['passenger'][passenger_count-1]['status'] = statement.replace('  ',' ')
-                passenger_line = passenger_line + 1
-            
-            if i>7 and statement.find('CHART NOT PREPARED') != -1:
-              chart_prepared = False
-
-          i=i+1
-          
-    return_object['data']['chart_prepared'] = chart_prepared
-    return_object['data']['pnr_number'] = pnr_num
-  except Exception as inst:
-    return_object['status'] = 'TIMEOUT'
-    return_object['data']   = {'pnr_number' : pnr_num , 'message' : '[' + str(inst) + '] ' +  inst.message}
-    logging.debug('TIMEOUT ' + pnr_num)
-    
-  
-  return return_object
-
-    return {:hello => 'hi'}
-  end
-
-=end
 end
