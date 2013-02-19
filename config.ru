@@ -1,2 +1,5 @@
 require './app'
-run Sinatra::Application
+
+use Rack::ShowExceptions
+
+run App.new

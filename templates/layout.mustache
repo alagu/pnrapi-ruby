@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    <meta charset="utf-8">
+    <title>
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style>
+      body { padding-top: 60px; /* 60px to make the container go all the way
+      to the bottom of the topbar */ }
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js">
+      </script>
+    <![endif]-->
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+    <style>
+    </style>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top navbar-inverse">
+      <div class="navbar-inner">
+        <div class="container">
+          <ul class="nav">
+          </ul>
+          <form class="navbar-form pull-right">
+          </form>
+          <a class="brand" href="http://pnrapi.alagu.net/">
+            Indian Railways PNR API
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="hero-unit">
+        <div>
+          <h1>
+            Indian Railways PNR API
+          </h1>
+          <p>
+            <br>
+            Easiest way to integrate PNR fetching into your app.
+          </p>
+        </div>
+      </div>
+      <div>
+        <div style="margin-top: 10px; font-size: 14px; color: rgb(0, 0, 0); font-family: verdana; line-height: normal;">
+          <h2 style="font-size: 15px;">
+            Request:
+          </h2>
+          <div class="code" style="font-family: monospace; border: 0px none; margin-top: 10px;">
+            <a href="http://pnrapi.alagu.net/api/v1.0/pnr/4541990940">
+              http://pnrapi.alagu.net/api/v1.0/pnr/&lt;10-digit-pnr-number&gt;
+            </a>
+          </div>
+        </div>
+        <div style="margin-top: 10px; font-size: 14px; color: rgb(0, 0, 0); font-family: verdana; line-height: normal;">
+          <h2 style="font-size: 15px;">
+            Sample Response:
+          </h2>
+          <div class="code" style="font-family: monospace; border: 0px none; margin-top: 10px;">
+            <pre>
+
+"status" : "OK",
+"data" : { 
+          "train_name" : "ERNAKULAM EXP",
+          "train_number" : "12677",
+          "from" :  {"name" : "Bangalore City" , "code":"SBC"},
+          "to" :  {"name" : "Coimbatore Jn." , "code":"CBE"},
+          "alight" : {"name" : "Coimbatore Jn." , "code":"CBE"},
+          "board" : {"name" : "Bangalore City" , "code":"SBC"},
+          "class" : "2S",
+          "travel_date" : "2-6-2011"
+          "passenger" : [ { "seat_number" : "D8  , 31,GN", "status" : "CNF" },
+                          { "seat_number" : "D8  , 32,GN", "status" : "CNF" } ],
+          "chart_prepared" : false
+         }
+            </pre>
+          </div>
+        </div>
+        <div style="margin-top: 10px; font-size: 14px; color: rgb(0, 0, 0); font-family: verdana; line-height: normal;">
+          <h2 style="font-size: 15px;">
+            Options:
+          </h2>
+          <div style="margin-top: 10px; font-size: 13px;">
+            <div class="code" style="font-family: monospace; border: 0px none; margin-top: 10px;">
+              Supports JSONP. Example:&nbsp;
+              <a href="http://pnrapi.alagu.net/api/v1.0/pnr/4541990940?jsonp=parseJSON">
+                http://pnrapi.alagu.net/api/v1.0/pnr/&lt;10-digit-pnr-number&gt;?jsonp=yourcallbackfunction
+              </a>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top: 10px; font-size: 14px; color: rgb(0, 0, 0); font-family: verdana; line-height: normal;">
+          <h2 style="font-size: 15px;">
+            Status Codes:
+          </h2>
+          <table border="1">
+            <tbody>
+              <tr>
+                <th>
+                  Code
+                </th>
+                <th>
+                  What it means
+                </th>
+              </tr>
+              <tr>
+                <td>
+                  OK
+                </td>
+                <td>
+                  All iz well. You should get a response
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  TIMEOUT
+                </td>
+                <td>
+                  There was a server timeout. Server timeout is 1 second.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  INVALID
+                </td>
+                <td>
+                  Invalid PNR Number. It doesn't exist.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <br>
+          <br>
+          Contact: allagappan@gmail.com
+        </div>
+      </div>
+      <hr>
+      <div>
+        © Alagu 2013
+      </div>
+    </div>
+
+    <style>
+      
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js">
+    </script>
+    <script src="js/bootstrap.js">
+    </script>
+  </body>
+</html>
