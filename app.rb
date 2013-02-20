@@ -47,7 +47,7 @@ class App < Sinatra::Base
     content_type 'application/json'
     cache_key = PNR_CACHE_KEY % (pnr)
 
-    data = settings.cache.get(PNR_CACHE_KEY)
+    data = false #settings.cache.get(PNR_CACHE_KEY)
 
     if not data
       data = Status.fetch(pnr)
