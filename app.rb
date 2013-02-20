@@ -20,14 +20,15 @@ HALF_DAY     = 43200
 PNR_CACHE_KEY = "pnr:%s"
 
 
-set :environment, :development
-set :cache, Dalli::Client.new
 set :public_folder, File.dirname(__FILE__) + '/public'
 
 Sinatra.register Mustache::Sinatra
 
 class App < Sinatra::Base
   register Mustache::Sinatra
+  set :environment, :development
+  set :cache, Dalli::Client.new
+
   require './views/layout.rb'
 
   set :mustache, {
