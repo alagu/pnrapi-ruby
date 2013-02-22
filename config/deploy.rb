@@ -8,7 +8,7 @@ role :web, "198.101.212.213", "198.101.212.248", "198.101.212.15"
 # if you want to clean up old releases on each deploy uncomment this:
 # after "deploy:restart", "deploy:cleanup"
 
-set :unicorn_conf, "#{release_path}/unicorn.rb"
+set :unicorn_conf, "#{deploy_to}/shared/config/unicorn.rb"
 set :unicorn_pid, "#{deploy_to}/shared/pids/unicorn.pid" 
 set :public_children, []
 set :shared_children, %w(log tmp)
