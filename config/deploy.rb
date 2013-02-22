@@ -11,7 +11,7 @@ role :web, "198.101.212.213", "198.101.212.248", "198.101.212.15"
 set :unicorn_conf, "#{release_path}/unicorn.rb"
 set :unicorn_pid, "#{deploy_to}/shared/pids/unicorn.pid" 
 set :public_children, []
-
+set :shared_children, %w(log tmp)
 
 namespace :deploy do
  
