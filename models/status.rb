@@ -60,16 +60,16 @@ class Status
               return_object['data']['travel_date'] = {'timestamp' => timestamp, 'date' => date}
             elsif i == 3
               return_object['data']['from'] = Station.get_station(statement)
-              return_object['data']['from']['time'] = Schedule.get_departure_time(return_object['data']['train_number'], return_object['data']['from']['code'])
+              return_object['data']['from']['time'] = Schedule.get_departure_time(return_object['data']['train_number'], return_object['data']['from'][:code])
             elsif i == 4
               return_object['data']['to'] = Station.get_station(statement)
-              return_object['data']['to']['time'] =  Schedule.get_arrival_time(return_object['data']['train_number'], return_object['data']['to']['code'])
+              return_object['data']['to']['time'] =  Schedule.get_arrival_time(return_object['data']['train_number'], return_object['data']['to'][:code])
             elsif i == 5
               return_object['data']['alight'] = Station.get_station(statement)
-              return_object['data']['alight']['time'] = Schedule.get_arrival_time(return_object['data']['train_number'], return_object['data']['from']['code'])
+              return_object['data']['alight']['time'] = Schedule.get_arrival_time(return_object['data']['train_number'], return_object['data']['to'][:code])
             elsif i == 6
               return_object['data']['board'] = Station.get_station(statement)
-              return_object['data']['board']['time'] = Schedule.get_departure_time(return_object['data']['train_number'], return_object['data']['from']['code'])
+              return_object['data']['board']['time'] = Schedule.get_departure_time(return_object['data']['train_number'], return_object['data']['from'][:code])
               departure_string  = (date + " " + return_object['data']['board']['time'])
               return_object['data']['board']['timestamp'] = DateTime.strptime(departure_string, "%d-%m-%Y %H:%M").to_time.to_i
             elsif i == 7
