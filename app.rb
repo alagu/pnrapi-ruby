@@ -25,16 +25,18 @@ set :public_folder, File.dirname(__FILE__) + '/public'
 Sinatra.register Mustache::Sinatra
 
 class App < Sinatra::Base
-  register Mustache::Sinatra
-  set :environment, :development
-  set :cache, Dalli::Client.new
-
   require './views/layout.rb'
 
-  set :mustache, {
-    :views     => './views',
-    :templates => './templates'
-  }
+  configure do
+    register Mustache::Sinatra
+    set :environment, :development
+    set :cache, Dalli::Client.new
+    set :mustache, {
+      :views     => './views',
+      :templates => './templates'
+    }
+  end
+
 
   get '/' do
     @title = "Mustache + Sinatra = Wonder"
@@ -48,7 +50,7 @@ class App < Sinatra::Base
     content_type 'application/json'
     cache_key = PNR_CACHE_KEY % (pnr)
 
-    data = false #settings.cache.get(PNR_CACHE_KEY)
+    data = settings.cache.get(PNR_CACHE_KEY)
 
     if not data
       data = Status.fetch(pnr)
