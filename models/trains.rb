@@ -18,10 +18,10 @@ class Schedule
   def self.get_departure_time(train, station)
     begin
       schedule_db = DB['schedule']
-      schedule = schedule_db.find({:train_number => train, :station_code => station}).to_a
+      schedule = schedule_db.find({:train_number => train.to_s, :station_code => station.to_s}).to_a
       schedule = schedule[0]
 
-      if schedule['depature'].empty?
+      if schedule['departure'].empty?
         return "00:00"
       else
         return schedule['departure']
@@ -34,10 +34,10 @@ class Schedule
   def self.get_arrival_time(train, station)
     begin
       schedule_db = DB['schedule']
-      schedule = schedule_db.find({:train_number => train, :station_code => station}).to_a
+      schedule = schedule_db.find({:train_number => train.to_s, :station_code => station.to_s}).to_a
       schedule = schedule[0]
 
-      if schedule['depature'].empty?
+      if schedule['arrival'].empty?
         return "00:00"
       else
         return schedule['arrival']
