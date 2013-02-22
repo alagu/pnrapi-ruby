@@ -9,7 +9,7 @@ role :web, "198.101.212.213", "198.101.212.248", "198.101.212.15"
 # after "deploy:restart", "deploy:cleanup"
 
 set :unicorn_conf, "#{deploy_to}/shared/config/unicorn.rb"
-set :unicorn_pid, "#{deploy_to}/shared/pids/unicorn.pid" 
+set :unicorn_pid, "#{deploy_to}/shared/tmp/pids/unicorn.pid" 
 set :public_children, []
 set :shared_children, %w(log tmp)
 
