@@ -1,4 +1,4 @@
-set :application, "pnrapi-ruby"
+set :application, "pnrapi"
 set :repository,  "git@github.com:alagu/pnrapi-ruby.git"
 set :user, "alagu"
 set :deploy_to, "/home/alagu/pnrapi"
