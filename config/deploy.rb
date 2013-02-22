@@ -20,7 +20,7 @@ namespace :deploy do
   end
  
   task :start do
-    run "cd #{deploy_to}/current && bundle exec unicorn -c #{unicorn_conf} -E #{rack_env} -D"
+    run "cd #{deploy_to}/current && bundle exec unicorn -c #{unicorn_conf} -E development -D -l 0.0.0.0:3001"
   end
  
   task :stop do
