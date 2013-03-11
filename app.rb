@@ -5,13 +5,15 @@ require 'rest_client'
 require 'date'
 require 'sinatra/base'
 require 'mustache/sinatra'
+require 'resque'
 
 
-base_path = File.join(File.dirname(__FILE__), 'models')
+base_path = File.join(File.dirname(__FILE__))
 
-require File.join(File.dirname(__FILE__), 'config.rb')
-require File.join(base_path, 'status.rb')
-require File.join(base_path, 'trains.rb')
+require File.join(base_path, 'config.rb')
+require File.join(base_path, 'models', 'status.rb')
+require File.join(base_path, 'models', 'trains.rb')
+require File.join(base_path, 'tasks', 'stats_job.rb')
 
 client   = MongoClient.new('localhost', 27017)
 DB       = client['pnrapi']
@@ -56,6 +58,7 @@ class App < Sinatra::Base
       data = Status.fetch(pnr)
     end
 
+    Resque.enqueue StatsJob, 'pnr_status', {:pnr => pnr }
 
     if jsonp
       "#{jsonp}(#{data.to_json})"
