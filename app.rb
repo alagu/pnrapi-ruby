@@ -15,11 +15,12 @@ require File.join(base_path, 'models', 'status.rb')
 require File.join(base_path, 'models', 'trains.rb')
 require File.join(base_path, 'tasks', 'stats_job.rb')
 
-client   = MongoClient.new('localhost', 27017)
-DB       = client['pnrapi']
-TWO_WEEKS    = 1209600
-HALF_DAY     = 43200
+client        = MongoClient.new('localhost', 27017)
+DB            = client['pnrapi']
+TWO_WEEKS     = 1209600
+HALF_DAY      = 43200
 PNR_CACHE_KEY = "pnr:%s"
+Resque.redis  = "198.101.212.213:6379"
 
 
 set :public_folder, File.dirname(__FILE__) + '/public'
