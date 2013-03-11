@@ -46,10 +46,16 @@ class App < Sinatra::Base
     mustache 'index'
   end
 
+  get '/test' do
+    Resque.enqueue StatsJob, 'pnr_status', {:pnr => '123' }
+    "test"
+  end
+
   get '/api/v1.0/pnr/:pnr' do
+    start_t = Time.now
     jsonp = params.fetch 'jsonp', nil
     pnr   = params.fetch 'pnr'
-    
+
     Resque.enqueue StatsJob, 'pnr_status', {:pnr => pnr }
 
     content_type 'application/json'
@@ -60,6 +66,12 @@ class App < Sinatra::Base
     if not data
       data = Status.fetch(pnr)
     end
+    end_t = Time.now
+    rtt = ((end_t - start_t) * 1000).to_i.to_s
+
+    data['rtt'] = rtt 
+    Resque.enqueue StatsJob, 'rtt', {:rtt => rtt.to_i }
+
 
     if jsonp
       "#{jsonp}(#{data.to_json})"
