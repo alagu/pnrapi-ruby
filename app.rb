@@ -49,6 +49,8 @@ class App < Sinatra::Base
   get '/api/v1.0/pnr/:pnr' do
     jsonp = params.fetch 'jsonp', nil
     pnr   = params.fetch 'pnr'
+    
+    Resque.enqueue StatsJob, 'pnr_status', {:pnr => pnr }
 
     content_type 'application/json'
     cache_key = PNR_CACHE_KEY % (pnr)
@@ -58,8 +60,6 @@ class App < Sinatra::Base
     if not data
       data = Status.fetch(pnr)
     end
-
-    Resque.enqueue StatsJob, 'pnr_status', {:pnr => pnr }
 
     if jsonp
       "#{jsonp}(#{data.to_json})"
