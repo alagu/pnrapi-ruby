@@ -4,12 +4,14 @@ set :user, "alagu"
 set :deploy_to, "/home/alagu/pnrapi"
 
 role :web, "198.101.212.213", "198.101.212.248", "198.101.212.15"
+role :resque, "198.101.212.213"
 
 # if you want to clean up old releases on each deploy uncomment this:
 # after "deploy:restart", "deploy:cleanup"
 
 set :unicorn_conf, "#{deploy_to}/shared/config/unicorn.rb"
 set :unicorn_pid, "#{deploy_to}/shared/tmp/pids/unicorn.pid" 
+set :resque_pid,  "#{deploy_to}/shared/tmp/pids/resque.pid" 
 set :public_children, []
 set :shared_children, %w(log tmp)
 set :default_environment, {
@@ -30,4 +32,15 @@ namespace :deploy do
     run "if [ -f #{unicorn_pid} ]; then kill -QUIT `cat #{unicorn_pid}`; fi"
   end
  
+end
+
+namespace :resque, :roles => :resque  do
+  task :start do
+    run "PIDFILE=#{resque_pid} BACKGROUND=yes QUEUE=stats \
+    rake environment resque:work"
+  end
+
+  task :stop do
+    run "if [ -f #{resque_pid} ]; then kill -QUIT `cat #{resque_pid}`; fi"
+  end
 end
