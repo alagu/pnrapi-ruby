@@ -40,7 +40,7 @@ namespace :resque  do
     rake resque:work"
   end
 
-  task :stop do
+  task :stop, :roles => :resque  do
     run "if [ -f #{resque_pid} ]; then kill -QUIT `cat #{resque_pid}`; fi"
   end
 end
