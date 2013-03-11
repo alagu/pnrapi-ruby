@@ -34,9 +34,9 @@ namespace :deploy do
  
 end
 
-namespace :resque, :roles => :resque  do
-  task :start do
-    run "PIDFILE=#{resque_pid} BACKGROUND=yes QUEUE=stats \
+namespace :resque  do
+  task :start, :roles => :resque do
+    run "cd #{deploy_to}/current && PIDFILE=#{resque_pid} BACKGROUND=yes QUEUE=stats \
     rake environment resque:work"
   end
 
