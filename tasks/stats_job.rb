@@ -1,6 +1,9 @@
 require 'mixpanel'
+require 'resque-history'
+
 
 class StatsJob
+  extend Resque::Plugins::History
   @queue = :stats
 
   def self.perform(name, properties)
