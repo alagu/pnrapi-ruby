@@ -6,6 +6,7 @@ require 'date'
 require 'sinatra/base'
 require 'mustache/sinatra'
 require 'resque'
+require 'user_agent'
 
 
 base_path = File.join(File.dirname(__FILE__))
@@ -47,8 +48,9 @@ class App < Sinatra::Base
   end
 
   get '/test' do
-    Resque.enqueue StatsJob, 'pnr_status', {:pnr => '123' }
-    "test"
+    Resque.enqueue StatsJob, 'pnr_status', {:pnr => '123',
+      :agent => request.user_agent.to_s, :referer => request.referer.to_s }
+    "test #{request.user_agent.to_s}"
   end
 
   get '/api/v1.0/pnr/:pnr' do
@@ -56,7 +58,10 @@ class App < Sinatra::Base
     jsonp = params.fetch 'jsonp', nil
     pnr   = params.fetch 'pnr'
 
-    Resque.enqueue StatsJob, 'pnr_status', {:pnr => pnr }
+    Resque.enqueue StatsJob, 'pnr_status', {:pnr => pnr,
+      :agent => UserAgent.parse(request.user_agent).browser, 
+      :referer => request.referer.to_s
+    }
 
     content_type 'application/json'
     cache_key = PNR_CACHE_KEY % (pnr)
@@ -66,11 +71,6 @@ class App < Sinatra::Base
     if not data
       data = Status.fetch(pnr)
     end
-    end_t = Time.now
-    rtt = ((end_t - start_t) * 1000).to_i.to_s
-
-    data['rtt'] = rtt 
-    Resque.enqueue StatsJob, 'rtt', {:rtt => rtt.to_i }
 
 
     if jsonp
