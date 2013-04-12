@@ -31,6 +31,58 @@ Sinatra.register Mustache::Sinatra
 class App < Sinatra::Base
   require './views/layout.rb'
 
+  sample_response = <<RESPONSE
+{
+   "status":"OK",
+   "data":{
+      "train_number":"17017",
+      "chart_prepared":false,
+      "pnr_number":"8611691678",
+      "train_name":"RJT SC EXPRESS",
+      "travel_date":{
+         "timestamp":1367193600,
+         "date":"29-4-2013"
+      },
+      "from":{
+         "code":"PUNE",
+         "name":"PUNE JUNCTION",
+         "time":"22:30"
+      },
+      "to":{
+         "code":"SC",
+         "name":"SECUNDERABAD JUNCTION",
+         "time":"10:30"
+      },
+      "alight":{
+         "code":"SC",
+         "name":"SECUNDERABAD JUNCTION",
+         "time":"10:30"
+      },
+      "board":{
+         "code":"PUNE",
+         "name":"PUNE JUNCTION",
+         "time":"22:30",
+         "timestamp":1367274600
+      },
+      "class":"SL",
+      "passenger":[
+         {
+            "seat_number":"W/L  9,RLGN",
+            "status":"W/L  3"
+         },
+         {
+            "seat_number":"W/L  10,RLGN",
+            "status":"W/L  4"
+         },
+         {
+            "seat_number":"W/L  11,RLGN",
+            "status":"W/L  5"
+         }
+      ]
+   }
+}
+RESPONSE
+
   configure do
     register Mustache::Sinatra
     set :environment, :development
@@ -58,25 +110,33 @@ class App < Sinatra::Base
     jsonp = params.fetch 'jsonp', nil
     pnr   = params.fetch 'pnr'
 
-    Resque.enqueue StatsJob, 'pnr_status', {:pnr => pnr,
-      :agent => UserAgent.parse(request.user_agent).browser, 
-      :referer => request.referer.to_s
-    }
-
-    content_type 'application/json'
-    cache_key = PNR_CACHE_KEY % (pnr)
-
-    data = settings.cache.get(PNR_CACHE_KEY)
-
-    if not data
-      data = Status.fetch(pnr)
-    end
-
-
-    if jsonp
-      "#{jsonp}(#{data.to_json})"
+    if pnr == '1234567890'
+      pnr_data = sample_response
     else
-      "#{data.to_json}"
+      Resque.enqueue StatsJob, 'pnr_status', {:pnr => pnr,
+        :agent => UserAgent.parse(request.user_agent).browser, 
+        :referer => request.referer.to_s
+      }
+
+      content_type 'application/json'
+      cache_key = PNR_CACHE_KEY % (pnr)
+
+      data = settings.cache.get(PNR_CACHE_KEY)
+
+      if not data
+        data = Status.fetch(pnr)
+      end
+
+      pnr_data = data.to_json
     end
+
+  
+    if jsonp
+      "#{jsonp}(#{pnr_data})"
+    else
+      "#{pnr_data}"
+    end
+
+
   end
 end
