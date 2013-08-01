@@ -1,4 +1,4 @@
-APP_PATH = '/home/alagu/pnrapi-ruby/current/'
+APP_PATH = '/srv/www/pnrapi/'
 # set path to app that will be used to configure unicorn, 
 # note the trailing slash in this example
 @dir = APP_PATH
