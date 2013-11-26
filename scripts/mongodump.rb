@@ -1,9 +1,8 @@
 require 'sqlite3'
 require 'mongo'
-require File.join(File.dirname(File.dirname(__FILE__)), 'app.rb')
 
 
-@client = MongoClient.new('localhost', 27017)
+@client = Mongo::MongoClient.new('localhost', 27017)
 @db     = @client['pnrapi']
 
 def push_data
