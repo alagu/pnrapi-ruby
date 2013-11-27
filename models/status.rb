@@ -70,8 +70,8 @@ class Status
             elsif i == 6
               return_object['data']['board'] = Station.get_station(statement)
               return_object['data']['board']['time'] = Schedule.get_departure_time(return_object['data']['train_number'], return_object['data']['from'][:code])
-              departure_string  = (date + " " + return_object['data']['board']['time'])
-              return_object['data']['board']['timestamp'] = DateTime.strptime(departure_string, "%d-%m-%Y %H:%M").to_time.to_i
+              departure_string  = (date + " " + return_object['data']['board']['time'] + " +05:30")
+              return_object['data']['board']['timestamp'] = DateTime.strptime(departure_string, "%d-%m-%Y %H:%M %z").to_time.to_i
             elsif i == 7
               return_object['data']['class'] = statement
             elsif i > 7
