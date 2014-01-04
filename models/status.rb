@@ -2,7 +2,8 @@ class Status
 
   def self.fetch(pnr)
     return_object = {}
-    params = {'lccp_pnrno1' => pnr, 'submitpnr' => 'Get Status'}
+    rand_captcha = rand.to_s[2..6].to_i
+    params = {'lccp_pnrno1' => pnr, 'submitpnr' => 'Get Status', 'lccp_cap_val' => rand_captcha, 'lccp_capinp_val' => rand_captcha} 
     headers = {"Content-type"    => "application/x-www-form-urlencoded",
                "Host"            => "www.indianrail.gov.in",
                "User-Agent"      => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:2.0.1) Gecko/20100101 Firefox/4.0.1",

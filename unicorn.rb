@@ -3,7 +3,7 @@ APP_PATH = '/srv/www/pnrapi/'
 # note the trailing slash in this example
 @dir = APP_PATH
 
-worker_processes 15 
+worker_processes 25 
 working_directory @dir
 
 timeout 30
