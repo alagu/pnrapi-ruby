@@ -15,7 +15,7 @@ class Status
                "Referer"         => "http://www.indianrail.gov.in/pnr_stat.html",
                "Accept"          => "text/plain"}
 
-    url  = 'www.indianrail.gov.in/cgi_bin/inet_pnstat_cgi_28688.cgi'
+    url  = 'www.indianrail.gov.in/cgi_bin/inet_pnstat_cgi_7172.cgi'
 
     return_object = {}
     return_object['status'] = 'OK'
