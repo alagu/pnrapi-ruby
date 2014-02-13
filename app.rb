@@ -7,6 +7,8 @@ require 'sinatra/base'
 require 'mustache/sinatra'
 require 'resque'
 require 'user_agent'
+require 'nokogiri'
+require 'open-uri'
 
 
 base_path = File.join(File.dirname(__FILE__))
