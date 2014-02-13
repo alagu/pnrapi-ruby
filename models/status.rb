@@ -15,7 +15,9 @@ class Status
                "Referer"         => "http://www.indianrail.gov.in/pnr_stat.html",
                "Accept"          => "text/plain"}
 
-    url  = 'www.indianrail.gov.in/cgi_bin/inet_pnstat_cgi_8390.cgi'
+    require 'nokogiri'
+    require 'open-uri'
+    url  = Nokogiri::HTML(open("http://www.indianrail.gov.in/pnr_Enq.html")).css('form#form3')[0]['action']
 
     return_object = {}
     return_object['status'] = 'OK'
