@@ -15,11 +15,8 @@ base_path = File.join(File.dirname(__FILE__))
 
 require File.join(base_path, 'config.rb')
 require File.join(base_path, 'models', 'status.rb')
-require File.join(base_path, 'models', 'trains.rb')
 require File.join(base_path, 'tasks', 'stats_job.rb')
 
-client        = MongoClient.new('localhost', 27017)
-DB            = client['pnrapi']
 TWO_WEEKS     = 1209600
 HALF_DAY      = 43200
 PNR_CACHE_KEY = "pnr:%s"
