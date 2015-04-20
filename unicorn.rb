@@ -1,4 +1,4 @@
-APP_PATH = '/srv/www/pnrapi/'
+APP_PATH = '/home/alagu/pnrapi-ruby/'
 # set path to app that will be used to configure unicorn, 
 # note the trailing slash in this example
 @dir = APP_PATH
@@ -10,7 +10,8 @@ timeout 30
 
 # Specify path to socket unicorn listens to, 
 # we will use this in our nginx.conf later
-listen "#{@dir}tmp/sockets/unicorn.sock", :backlog => 64
+#listen "#{@dir}tmp/sockets/unicorn.sock", :backlog => 64
+listen 3000
 
 # Set process id path
 pid "#{@dir}tmp/pids/unicorn.pid"
